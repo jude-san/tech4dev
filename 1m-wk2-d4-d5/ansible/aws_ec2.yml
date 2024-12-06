@@ -1,0 +1,11 @@
+aws_profile: "{{ lookup('env', 'AWS_PROFILE') | default('tech4dev', true) }}"
+regions: us-east-1
+# hostnames:
+#   - tag:Name
+filters:
+  instance-state-name: running
+keyed_groups:
+  - key: tags.Name
+    separator: ''
+compose:
+  ansible_host: public_ip_address

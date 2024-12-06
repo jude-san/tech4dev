@@ -1,0 +1,40 @@
+---
+- name: Configure Ubuntu EC2 instance
+  become: yes
+
+  tasks:
+    - name: Update all packages
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Ensure Nginx is started and enabled
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Import the Datadog Agent role from the Datadog collection
+      ansible.builtin.import_role:
+        name: datadog.dd.agent
+
+    - name: Configure Datadog Agent
+      copy:
+        dest: /etc/datadog-agent/datadog.yaml
+        content: |
+          api_key: "{{ datadog_api_key }}"
+          logs_enabled: true
+          traces_enabled: true
+          apm_config:
+            enabled: true
+
+    - name: Restart Datadog Agent
+      ansible.builtin.systemd:
+        name: datadog-agent
+        state: restarted
+        enabled: true

@@ -1,0 +1,58 @@
+# Terraform
+.terraform/                # Terraform state files
+*.tfstate                 # Local Terraform state
+*.tfstate.backup          # Backup state files
+*.tfvars                  # Terraform variable files
+crash.log                 # Crash log files
+*.tfplan                  # Terraform plan files
+override.tf               # Override config
+override.tf.json          # Override config JSON
+*_override.tf             # Any override config
+*_override.tf.json        # Any override config JSON
+
+# Ansible
+*.retry                   # Retry files for failed playbooks
+.vagrant/                 # Vagrant files (if using Vagrant with Ansible)
+group_vars/*.yml          # Group variables
+host_vars/*.yml           # Host variables
+vault.yml                 # Vault files (if not encrypted)
+inventory                 # Static inventory file
+*.log                     # Log files
+
+# Nginx
+logs/                     # Nginx log directory (customize path if needed)
+*.pid                     # PID files
+*.swp                     # Swap files (if editing Nginx config)
+
+# VSCode
+.vscode/                  # Workspace settings
+.vscode/settings.json     # User-specific settings
+.vscode/tasks.json        # User-specific tasks
+.vscode/launch.json       # User-specific launch configurations
+
+# Python
+__pycache__/              # Byte-compiled files
+*.py[cod]                 # Bytecode cache files
+*.pyo                     # Optimized bytecode
+*.egg                     # Distribution files
+*.egg-info/               # Package metadata
+dist/                     # Distribution directories
+build/                    # Build directories
+pip-wheel-metadata/       # Wheel metadata
+*.pytest_cache/           # pytest cache
+.env                      # Virtual environment files
+*.venv/                   # Virtual environments
+venv/                   # Virtual environments
+*.log                     # Log files
+*.coverage                # Coverage reports
+htmlcov/                  # Coverage HTML reports
+*.mypy_cache/             # mypy cache
+.pyre/                    # Pyre static type checker
+*.pylint.d/               # Pylint cache
+.DS_Store                 # macOS files
+.idea/                    # PyCharm settings
+*.ipynb_checkpoints       # Jupyter Notebook checkpoints
+
+# All keys
+*.key                     # Key files
+*.pem                     # Private keys
