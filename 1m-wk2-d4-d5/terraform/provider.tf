@@ -1,3 +1,14 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+    }
+    # datadog = {
+    #   source  = "DataDog/datadog"
+    # }
+  }
+}
+
 provider "aws" {
   region  = "us-east-1"
   profile = "tech4dev"

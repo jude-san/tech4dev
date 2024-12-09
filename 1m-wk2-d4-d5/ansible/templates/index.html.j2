@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>{{ inventory_hostname }}</title>
+  </head>
+  <body>
+    <h1>{{ inventory_hostname }}</h1>
+    <p>Hostname: {{ inventory_hostname }}</p>
+    <p>IP: {{ ansible_default_ipv4.address }}</p>
+    <p>OS: {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
+    <p>Kernel: {{ ansible_kernel }}</p>
+    <p>Architecture: {{ ansible_architecture }}</p>
+    <p>Memory: {{ ansible_memtotal_mb }} MB</p>
+    <p>CPU: {{ ansible_processor_vcpus }} vCPU</p>
+  </body>
+</html>

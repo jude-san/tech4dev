@@ -1,11 +1,13 @@
 aws_profile: "{{ lookup('env', 'AWS_PROFILE') | default('tech4dev', true) }}"
+plugin: amazon.aws.aws_ec2
 regions: us-east-1
-# hostnames:
-#   - tag:Name
+hostnames:
+  - tag:Name
 filters:
   instance-state-name: running
 keyed_groups:
-  - key: tags.Name
-    separator: ''
+  - key: tags.Role
+    separator: ""
 compose:
   ansible_host: public_ip_address
+strict: False

@@ -1,0 +1,92 @@
+---
+- name: Fetch IPs of Webservers
+  hosts: web
+  gather_facts: true
+  vars_files:
+    - host_vars/variables.yml
+  tasks:
+    - name: Collect public IPs
+      ansible.builtin.set_fact:
+        webserver_ips: "{{ groups['web'] | map('extract', hostvars, 'ansible_host') | list }}"
+
+    - name: Display Collected IPs
+      ansible.builtin.debug:
+        msg: "Web Servers: {{ webserver_ips }}"
+
+    - name: Save IPs to JSON file
+      ansible.builtin.copy:
+        content: "{{ webserver_ips | to_json }}"
+        dest: /tmp/webserver_ips.json
+        mode: '0644'
+      delegate_to: localhost
+
+- name: Configure Proxy (Loadbalancer) instance
+  hosts: loadbalancer
+  become: true
+  vars_files:
+    - host_vars/variables.yml
+  tasks:
+    - name: Update all packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+
+    - name: Add Caddy Repository
+      ansible.builtin.apt_repository:
+        repo: "deb [trusted=yes] https://apt.fury.io/caddy/ /"
+        state: present
+        filename: caddy-fury.list
+
+    - name: Install Caddy
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+        name: caddy
+        state: present
+
+    - name: Get Webserver IP Addresses
+      ansible.builtin.set_fact:
+        webserver_ips: "{{ lookup('file', '/tmp/webserver_ips.json') | from_json }}"
+      delegate_to: localhost
+
+    - name: Create Caddyfile
+      ansible.builtin.template:
+        src: Caddyfile.j2
+        dest: /etc/caddy/Caddyfile
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    # - name: Ensure Caddy is started and enabled
+    #   ansible.builtin.systemd:
+    #     name: caddy
+    #     state: started
+    #     enabled: true
+
+    - name: Restart Caddy
+      ansible.builtin.systemd:
+        name: caddy
+        state: restarted
+        enabled: true
+
+    - name: Import the Datadog Agent role from the Datadog collection
+      ansible.builtin.import_role:
+        name: datadog.dd.agent
+
+    - name: Configure Datadog Agent
+      ansible.builtin.template:
+        src: datadog-agent.yaml.j2
+        dest: /etc/datadog-agent/datadog.yaml
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Restart Datadog Agent
+      ansible.builtin.systemd:
+        name: datadog-agent
+        state: restarted
+        enabled: true
+
+    - name: Print Public IP of Loadbalancer
+      ansible.builtin.debug:
+        msg: "Loadbalancer Public IP: {{ ansible_host }}"

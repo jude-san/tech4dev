@@ -1,0 +1,23 @@
+---
+- name: Install Apache
+  hosts: webservers
+  become: true
+  vars_files:
+    - hosts_vars/variables.yml
+  tasks:
+    - name: Install Apache
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+    - name: Set Apache to listen on port {{ port_number }}
+      ansible.builtin.template:
+        src: ports.conf.j2
+        dest: /etc/apache2/ports.conf
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+    - name: Start Apache
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: true

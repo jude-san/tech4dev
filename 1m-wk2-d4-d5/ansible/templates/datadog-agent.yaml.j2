@@ -1,0 +1,11 @@
+api_key: "{{ datadog_api_key }}"
+logs_enabled: true
+traces_enabled: true
+apm_config:
+    enabled: true
+hostname: "{{ inventory_hostname }}"
+tags:
+    - name: "{{ inventory_hostname }}"
+cloud_provider_metadata:
+    - "aws"
+collect_ec2_tags: true

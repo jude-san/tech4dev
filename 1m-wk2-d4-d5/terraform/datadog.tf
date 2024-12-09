@@ -1,45 +1,47 @@
-# resource "datadog_dashboard" "ubuntu_nginx_dashboard" {
-#   title       = "Ubuntu Nginx Metrics and Traces"
+# resource "datadog_dashboard" "webserver_dashboard" {
+#   title       = "Webserver Metrics"
+#   description = "Dashboard for webserver metrics"
 #   layout_type = "ordered"
 
 #   widget {
-#     title = "CPU Utilization"
-#     definition {
-#       type = "timeseries"
-#       requests {
-#         q = "avg:aws.ec2.cpuutilization{host:nginx}"
+#     timeseries_definition {
+#       request {
+#           q = "avg:aws.ec2.cpuutilization{host:web*}"
+#           display_type = "line"
+#           style {
+#             palette = "warn"
+#             line_type = "dashed"
+#             line_width = "thin"
+#           }
+#       }
+#     }
+#   }
+#   widget {
+#     timeseries_definition {
+#       request {
+#           q = "avg:system.mem.used{host:web*}"
+#           display_type = "line"
+#           style {
+#             palette = "dog_classic"
+#             line_type = "solid"
+#             line_width = "normal"
+#           }
+#       }
+#     }
+#   }
+#   widget {
+#     timeseries_definition {
+#       request {
+#           q = "avg:system.disk.used{host:web*}"
+#           display_type = "line"
+#           style {
+#             palette = "dog_classic"
+#             line_type = "solid"
+#             line_width = "normal"
+#           }
 #       }
 #     }
 #   }
 
-#   widget {
-#     title = "Memory Utilization"
-#     definition {
-#       type = "timeseries"
-#       requests {
-#         q = "avg:system.mem.used{host:nginx}"
-#       }
-#     }
-#   }
-
-#   widget {
-#     title = "Nginx Access Logs"
-#     definition {
-#       type = "log_stream"
-#       requests {
-#         query = "service:nginx @host:nginx"
-#       }
-#     }
-#   }
-
-#   widget {
-#     title = "Application Traces"
-#     definition {
-#       type = "trace_stream"
-#       requests {
-#         query_string = "env:production"
-#         service      = "nginx-service"
-#       }
-#     }
-#   }
+#   tags = ["webserver"]
 # }

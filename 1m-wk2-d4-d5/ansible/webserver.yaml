@@ -1,11 +1,13 @@
 ---
-- name: Configure Ubuntu EC2 instance
-  become: yes
-
+- name: Configure Web Instances
+  hosts: web
+  become: true
+  vars_files:
+    - host_vars/variables.yml
   tasks:
     - name: Update all packages
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         upgrade: dist
 
     - name: Install Nginx
@@ -13,25 +15,41 @@
         name: nginx
         state: present
 
+    - name: Setup Custom Index Page
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
     - name: Ensure Nginx is started and enabled
       ansible.builtin.systemd:
         name: nginx
         state: started
-        enabled: yes
+        enabled: true
 
     - name: Import the Datadog Agent role from the Datadog collection
       ansible.builtin.import_role:
         name: datadog.dd.agent
 
     - name: Configure Datadog Agent
-      copy:
+      ansible.builtin.copy:
         dest: /etc/datadog-agent/datadog.yaml
+        mode: "0644"
         content: |
           api_key: "{{ datadog_api_key }}"
           logs_enabled: true
           traces_enabled: true
           apm_config:
             enabled: true
+
+    - name: Set permissions for Datadog Agent configuration file
+      ansible.builtin.file:
+        path: /etc/datadog-agent/datadog.yaml
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
 
     - name: Restart Datadog Agent
       ansible.builtin.systemd:
