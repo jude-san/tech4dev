@@ -24,7 +24,7 @@ jobs:
     - name: Build and push docker image
       uses: docker/build-push-action@v6.10.0
       with:
-        context: .
+        context: ./1m-wk3-d2/mega-app/.
         file: ./1m-wk3-d2/mega-app/Dockerfile
         push: true
         tags: ${{ vars.DOCKERHUB_USERNAME }}/mega-app:latest
