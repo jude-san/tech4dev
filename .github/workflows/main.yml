@@ -20,13 +20,14 @@ jobs:
       with:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
     - name: Build and push docker image
       uses: docker/build-push-action@v6.10.0
       with:
         context: .
         file: ./1m-wk3-d2/mega-app/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/mega-app:latest
+        tags: ${{ vars.DOCKERHUB_USERNAME }}/mega-app:latest
     # - name: Push docker image
     #   run: kubectl apply -f deployment.yaml
 # Build go application
