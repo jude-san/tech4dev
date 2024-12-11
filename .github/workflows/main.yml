@@ -1,6 +1,6 @@
 # Build and test docker image for golang application
 # Setup go build environment
-name: Setup Go 1.23.3
+name: Build and test docker image for golang application
 on: [push]
 jobs:
   build:
@@ -12,8 +12,9 @@ jobs:
       uses: actions/setup-go@v5.2.0
       with:
         go-version: 1.23.3
-    # - name: Run go test
-    #   run: go test ./...
+    - name: Run go test
+      run: |
+        cd 1m-wk3-d2/mega-app && go test ./...
     # - name: Build docker image
     #   run: docker build -t golang-app .
     # - name: Push docker image
