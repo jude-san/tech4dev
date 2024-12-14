@@ -4,6 +4,16 @@
 *.tfvars                  # Terraform variable files
 *.tfplan                  # Terraform plan files
 
+../Week2_assign_terraform/terraform/.terraform
+../Week2_assign_terraform/terraform/*.tfstate
+../Week2_assign_terraform/terraform/*.tfstate.backup
+# ../Week2_assign_terraform/terraform/
+# ../Week2_assign_terraform/terraform/
+
+
+
+
+
 # Ansible
 group_vars/*.yml          # Group variables
 host_vars/*.yml           # Host variables
